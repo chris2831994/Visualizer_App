@@ -1,0 +1,16 @@
+file(GLOB_RECURSE source *.cpp *.h)
+
+configure_file(test.glade test.glade COPYONLY)
+
+link_directories(
+        ${GTKMM_LIBRARY_DIRS}  )
+
+include_directories(
+        ${GTKMM_INCLUDE_DIRS}  )
+
+add_executable(program
+        ${source}
+        ../include/boost_di.hpp)
+
+target_link_libraries(program
+        ${GTKMM_LIBRARIES}  )
