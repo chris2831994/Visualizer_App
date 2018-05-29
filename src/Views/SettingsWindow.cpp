@@ -21,7 +21,7 @@ SettingsWindow::SettingsWindow(std::shared_ptr<IConfigService> configService)
     add(m_VBox);
 
     m_Entry_FileName.set_max_length(100);
-    m_Entry_FileName.set_text(configService->getConfig().getFileName());
+    m_Entry_FileName.set_text(configService->getConfig()->getFileName());
 
     m_Frame_FileName.add(m_Entry_FileName);
 
@@ -51,5 +51,5 @@ void SettingsWindow::on_button_cancel() {
 }
 
 void SettingsWindow::on_button_save() {
-
+    configService->writeConfig();
 }

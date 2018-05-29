@@ -9,11 +9,12 @@
 #include <fftw3.h>
 #include "IFifoProcessorService.h"
 #include "IFifoReaderService.h"
+#include "IConfigService.h"
 
 class FifoProcessorService : public IFifoProcessorService{
 public :
     //Constructor
-    FifoProcessorService(std::shared_ptr<IFifoReaderService> readerService);
+    FifoProcessorService(std::shared_ptr<IFifoReaderService> readerService, std::shared_ptr<IConfigService> configService);
     //Destructor
     ~FifoProcessorService();
 
@@ -26,9 +27,9 @@ protected:
 
     //protected Vars
     std::shared_ptr<IFifoReaderService> readerService;
+    std::shared_ptr<IConfigService> configService;
     fftw_complex *fftInput, *fftOutput;
     fftw_plan fftPlan;
-    uint16_t *dataBuffer;
     uint16_t *processedDataBuffer;
     uint16_t *averageDataBuffer;
     int sampleSize;

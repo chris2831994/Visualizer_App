@@ -9,6 +9,9 @@
 #include "Views/Widgets/IVisualizer.h"
 #include "Views/Widgets/LineVisualizer.h"
 #include "Views/VisualizerWindow.h"
+#include "Views/SettingsWindow.h"
+#include "Services/SimpleReaderService.h"
+#include "Services/SimpleProcessorService.h"
 
 
 namespace di = boost::di;
@@ -22,11 +25,10 @@ int main(int argc, char **argv) {
         di::bind<IConfigService>.to<SimpleConfigService>()
     );
 
-    auto window = injector.create<std::unique_ptr<VisualizerWindow>>();
-
     auto app = Gtk::Application::create(argc, argv, "org.gtkmm.asd");
 
-    return app->run(window);
+    auto mainWindow = injector.create<std::unique_ptr<VisualizerWindow>>();
+    return app->run(*mainWindow);
 }
 
 //    auto refBuilder = Gtk::Builder::create();

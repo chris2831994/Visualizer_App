@@ -7,6 +7,7 @@
 
 #include <gtkmm.h>
 #include "Widgets/IVisualizer.h"
+#include "SettingsWindow.h"
 
 class VisualizerWindow : public Gtk::Window
 {
@@ -14,6 +15,7 @@ class VisualizerWindow : public Gtk::Window
 public:
     VisualizerWindow(std::shared_ptr<IVisualizer> visualizer);
     virtual ~VisualizerWindow();
+    //void setSettingsWindow(SettingsWindow window);
 
 protected:
     //signal handlers:
@@ -26,6 +28,7 @@ protected:
     Gtk::ButtonBox m_ButtonBox;
     Gtk::Button m_Button_Quit;
     Gtk::Button m_Button_Settings;
+
 
 };
 

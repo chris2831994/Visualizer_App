@@ -10,22 +10,27 @@
 #include <memory>
 
 
-FifoProcessorService::FifoProcessorService(std::shared_ptr<IFifoReaderService> readerService)
-        : readerService(readerService)
+FifoProcessorService::FifoProcessorService(std::shared_ptr<IFifoReaderService> readerService, std::shared_ptr<IConfigService> configService)
+        : readerService(readerService),
+          configService(configService)
 {
-    this->sampleSize = 1024;
-    this->averageStep = 1024 / 128;
-    this->averageDataBuffer = (uint16_t *) malloc(sizeof(uint16_t) * 128);
-    this->processedDataBuffer = (uint16_t *) malloc(sizeof(uint16_t) * 1024);
-    this->fftInput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * 1024);
-    this->fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * 1024);
-    this->fftPlan = fftw_plan_dft_1d(1024, this->fftInput, this->fftOutput, FFTW_FORWARD,  FFTW_ESTIMATE);
+    VisualizerConfig * config = configService->getConfig();
+    this->sampleSize = config->getSampleSize();
+    this->averageStep = sampleSize / 128;
+    //this->averageDataBuffer = (uint16_t *) malloc(sizeof(uint16_t) * 128);
+    //this->processedDataBuffer = (uint16_t *) malloc(sizeof(uint16_t) * sampleSize);
+    this->averageDataBuffer = new uint16_t[128];
+    this->processedDataBuffer = new uint16_t[sampleSize];
+    this->fftInput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * sampleSize);
+    this->fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * sampleSize);
+    this->fftPlan = fftw_plan_dft_1d(sampleSize, this->fftInput, this->fftOutput, FFTW_FORWARD,  FFTW_ESTIMATE);
 }
 
 FifoProcessorService::~FifoProcessorService() {
-    delete(readerService);
-    free(this->processedDataBuffer);
-    free(this->averageDataBuffer);
+    //free(this->processedDataBuffer);
+    //free(this->averageDataBuffer);
+    delete(this->processedDataBuffer);
+    delete(this->averageDataBuffer);
     fftw_destroy_plan(fftPlan);
     fftw_free(fftInput);
     fftw_free(fftOutput);
@@ -39,11 +44,8 @@ void FifoProcessorService::process(uint16_t *dataBuffer) {
     }
     fftw_execute(fftPlan);
     for(int i =0; i<sampleSize; i++){
-
-
         int sq = sqrt(pow(fftOutput[i][0], 2) + pow(fftOutput[i][1], 2));
         int res = round(20*log10(sq));
-
         this->processedDataBuffer[i] = res;
         //std::cout << res;
     }
@@ -70,6 +72,6 @@ uint16_t *FifoProcessorService::average(){
         k++;
     }
 
-    return averageDataBuffer;
+    return this->averageDataBuffer;
 
 }

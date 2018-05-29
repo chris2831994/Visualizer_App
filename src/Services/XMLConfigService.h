@@ -8,7 +8,14 @@
 #include "IConfigService.h"
 
 class XMLConfigService : public IConfigService{
+public:
+    XMLConfigService();
+    ~XMLConfigService();
+    VisualizerConfig * getConfig();
+    void writeConfig();
 
+protected:
+    VisualizerConfig * config;
 };
 
 #endif //GTKMM_MVC_TEST_XMLCONFIGSERVICE_H

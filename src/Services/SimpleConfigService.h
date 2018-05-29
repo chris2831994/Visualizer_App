@@ -5,11 +5,14 @@
 #ifndef GTKMM_MVC_TEST_SIMPLECONFIGSERVICE_H
 #define GTKMM_MVC_TEST_SIMPLECONFIGSERVICE_H
 
-class SimpleConfigService : IConfigService{
+#include "IConfigService.h"
+
+class SimpleConfigService : public IConfigService{
 public :
     SimpleConfigService();
     ~SimpleConfigService();
     VisualizerConfig * getConfig();
+    void writeConfig();
 protected:
     VisualizerConfig * config;
 };

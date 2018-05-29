@@ -8,10 +8,12 @@
 #include "../Model/VisualizerConfig.h"
 
 class IConfigService {
-
 public:
-    virtual VisualizerConfig getConfig() = 0;
 
+    virtual VisualizerConfig * getConfig() = 0;
+    virtual void writeConfig() = 0;
+
+protected:
 };
 
 

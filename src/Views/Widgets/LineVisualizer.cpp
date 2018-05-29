@@ -42,8 +42,9 @@ bool LineVisualizer::on_draw(const Cairo::RefPtr <Cairo::Context> &cr)
 
     uint16_t * displayBuffer = this->processorService->getProcessedData();
     //int length = sizeof(displayBuffer) / sizeof(uint16_t);
+    int length = 128;
 
-    for(int i = 0; i < 128; i++){
+    for(int i = 0; i < length; i++){
         double x = 0.02 + i * 0.0075;
         double yUpper = 1.0 - (double)displayBuffer[i] / 160;
         double yLower = (double)displayBuffer[i] /160;
@@ -51,6 +52,10 @@ bool LineVisualizer::on_draw(const Cairo::RefPtr <Cairo::Context> &cr)
         cr->line_to(x, yUpper);
         cr->stroke();
     }
+
+//    cr->move_to(0, 0.5);
+//    cr->line_to(1, 0.5);
+//    cr->stroke();
 
     cr->restore();
 

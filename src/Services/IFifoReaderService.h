@@ -5,15 +5,13 @@
 #ifndef GTKMM_MVC_TEST_IFIFOREADERSERVICE_H
 #define GTKMM_MVC_TEST_IFIFOREADERSERVICE_H
 
-#include "Util/IFifoReader.h"
-
 class IFifoReaderService {
 public:
 
     virtual uint16_t * getData() = 0;
 
 protected:
-    IFifoReader * reader;
+
 };
 
 

@@ -5,13 +5,23 @@
 #ifndef GTKMM_MVC_TEST_MPDREADERSERVICE_H
 #define GTKMM_MVC_TEST_MPDREADERSERVICE_H
 
+#include <memory>
+#include "IFifoReaderService.h"
+#include "IConfigService.h"
+
 class MPDReaderService : public IFifoReaderService{
 public:
-    MPDReaderService(IFifoReader * reader);
+    MPDReaderService(std::shared_ptr<IConfigService> configService);
     ~MPDReaderService();
     uint16_t * getData();
 protected:
-    IFifoReader * reader;
+
+    std::shared_ptr<IConfigService> configService;
+    int fifo;
+    uint16_t * readingBuffer;
+
+    int readData();
+
 };
 
 #endif //GTKMM_MVC_TEST_MPDREADERSERVICE_H

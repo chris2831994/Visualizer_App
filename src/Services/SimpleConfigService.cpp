@@ -3,11 +3,11 @@
 //
 
 #include "SimpleConfigService.h"
+#include <iostream>
+using namespace std;
 
 SimpleConfigService::SimpleConfigService() {
-
-    this->config = new VisualizerConfig();
-
+    this->config = new VisualizerConfig("/tmp/mpd.fifo", 1024);
 }
 
 SimpleConfigService::~SimpleConfigService() {
@@ -15,5 +15,11 @@ SimpleConfigService::~SimpleConfigService() {
 }
 
 VisualizerConfig * SimpleConfigService::getConfig() {
-    return this->getConfig();
+    return this->config;
+}
+
+void SimpleConfigService::writeConfig(){
+    cout << "SimpleConfigService config : " << endl;
+    cout << "FifoFile :     " << config->getFileName() << endl;
+    cout << "SampleSize :   " << config->getSampleSize() << endl;
 }

@@ -13,4 +13,6 @@ add_executable(program
         ../include/boost_di.hpp)
 
 target_link_libraries(program
-        ${GTKMM_LIBRARIES}  )
+        ${GTKMM_LIBRARIES}
+        -lfftw3
+        -lm)
