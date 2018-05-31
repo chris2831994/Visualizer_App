@@ -20,7 +20,7 @@ protected:
     int fifo;
     uint16_t * readingBuffer;
 
-    int readData();
+    void readData();
 
 };
 

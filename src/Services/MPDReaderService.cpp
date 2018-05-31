@@ -12,7 +12,8 @@
 MPDReaderService::MPDReaderService(std::shared_ptr<IConfigService> configService) : configService(configService){
 
     VisualizerConfig * config = configService->getConfig();
-    this->fifo = open(config->getFileName().c_str(), O_RDONLY);
+    //opens fifo file, settings O_NONBLOCK flag stops system from blocking calling thread
+    this->fifo = open(config->getFileName().c_str(), O_RDONLY | O_NONBLOCK);
     //this->readingBuffer = (uint16_t *) malloc(sizeof(uint16_t) * config->getSampleSize());
     this->readingBuffer = new uint16_t[config->getSampleSize()];
 }
@@ -23,8 +24,12 @@ MPDReaderService::~MPDReaderService() {
     delete(readingBuffer);
 }
 
-int MPDReaderService::readData() {
-    return read(this->fifo,(uint16_t *) readingBuffer, 2 * (configService->getConfig()->getSampleSize()));
+void MPDReaderService::readData() {
+    if(!read(this->fifo,(uint16_t *) readingBuffer, 2 * (configService->getConfig()->getSampleSize()))){
+        for(int i = 0; i < configService->getConfig()->getSampleSize(); i++){
+            readingBuffer[i] = 1;
+        }
+    }
 }
 
 uint16_t * MPDReaderService::getData() {

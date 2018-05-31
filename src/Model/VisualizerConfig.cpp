@@ -4,8 +4,8 @@
 
 #include "VisualizerConfig.h"
 
-VisualizerConfig::VisualizerConfig(std::string fileName, int sampleSize)
-    : fileName(fileName), sampleSize(sampleSize)
+VisualizerConfig::VisualizerConfig(std::string fileName, int sampleSize, int defaultVisualizer)
+    : fileName(fileName), sampleSize(sampleSize), defaultVisualizer(defaultVisualizer)
 {}
 
 int VisualizerConfig::getSampleSize(){
@@ -22,4 +22,12 @@ std::string VisualizerConfig::getFileName(){
 
 void VisualizerConfig::setFileName(std::string value){
     this->fileName = value;
+}
+
+int VisualizerConfig::getDefaultVisualizer() {
+    return this->defaultVisualizer;
+}
+
+void VisualizerConfig::setDefaultVisualizer(int value) {
+    this->defaultVisualizer = value;
 }

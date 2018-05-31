@@ -12,6 +12,7 @@
 #include "Views/SettingsWindow.h"
 #include "Services/SimpleReaderService.h"
 #include "Services/SimpleProcessorService.h"
+#include "Views/Widgets/SettingsDialog.h"
 
 
 namespace di = boost::di;
@@ -22,12 +23,14 @@ int main(int argc, char **argv) {
         di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
         di::bind<IFifoReaderService>.to<MPDReaderService>(),
         di::bind<IVisualizer>.to<LineVisualizer>(),
+        di::bind<ISettingsDialog>.to<SettingsDialog>(),
         di::bind<IConfigService>.to<SimpleConfigService>()
     );
 
     auto app = Gtk::Application::create(argc, argv, "org.gtkmm.asd");
 
     auto mainWindow = injector.create<std::unique_ptr<VisualizerWindow>>();
+
     return app->run(*mainWindow);
 }
 

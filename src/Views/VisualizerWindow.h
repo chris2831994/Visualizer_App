@@ -8,14 +8,14 @@
 #include <gtkmm.h>
 #include "Widgets/IVisualizer.h"
 #include "SettingsWindow.h"
+#include "Widgets/ISettingsDialog.h"
 
 class VisualizerWindow : public Gtk::Window
 {
 
 public:
-    VisualizerWindow(std::shared_ptr<IVisualizer> visualizer);
+    VisualizerWindow(std::shared_ptr<IVisualizer> m_visualizer, std::shared_ptr<ISettingsDialog> m_settings);
     virtual ~VisualizerWindow();
-    //void setSettingsWindow(SettingsWindow window);
 
 protected:
     //signal handlers:
@@ -25,6 +25,7 @@ protected:
     //child widgets:
     Gtk::Box m_VBox;
     std::shared_ptr<IVisualizer> m_visualizer;
+    std::shared_ptr<ISettingsDialog> m_settings;
     Gtk::ButtonBox m_ButtonBox;
     Gtk::Button m_Button_Quit;
     Gtk::Button m_Button_Settings;

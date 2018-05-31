@@ -46,8 +46,8 @@ bool LineVisualizer::on_draw(const Cairo::RefPtr <Cairo::Context> &cr)
 
     for(int i = 0; i < length; i++){
         double x = 0.02 + i * 0.0075;
-        double yUpper = 1.0 - (double)displayBuffer[i] / 160;
-        double yLower = (double)displayBuffer[i] /160;
+        double yUpper = 1.0 - (double)displayBuffer[i] / 200;
+        double yLower = (double)displayBuffer[i] /200;
         cr->move_to(x, yLower);
         cr->line_to(x, yUpper);
         cr->stroke();
