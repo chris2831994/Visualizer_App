@@ -16,10 +16,10 @@ FifoProcessorService::FifoProcessorService(std::shared_ptr<IFifoReaderService> r
 {
     VisualizerConfig * config = configService->getConfig();
     this->sampleSize = config->getSampleSize();
-    this->averageStep = sampleSize / 128;
+    //this->averageStep = sampleSize / 128;
     //this->averageDataBuffer = (uint16_t *) malloc(sizeof(uint16_t) * 128);
     //this->processedDataBuffer = (uint16_t *) malloc(sizeof(uint16_t) * sampleSize);
-    this->averageDataBuffer = new uint16_t[128];
+    //this->averageDataBuffer = new uint16_t[128];
     this->processedDataBuffer = new uint16_t[sampleSize];
     this->fftInput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * sampleSize);
     this->fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * sampleSize);
@@ -30,7 +30,7 @@ FifoProcessorService::~FifoProcessorService() {
     //free(this->processedDataBuffer);
     //free(this->averageDataBuffer);
     delete(this->processedDataBuffer);
-    delete(this->averageDataBuffer);
+    //delete(this->averageDataBuffer);
     fftw_destroy_plan(fftPlan);
     fftw_free(fftInput);
     fftw_free(fftOutput);
@@ -52,26 +52,42 @@ void FifoProcessorService::process(uint16_t *dataBuffer) {
 
 }
 
-
 uint16_t * FifoProcessorService::getProcessedData() {
     uint16_t * dataBuffer = this->readerService->getData();
     int length = sizeof(dataBuffer) / sizeof(uint16_t);
     process(dataBuffer);
-    return average();
+    return dataBuffer;
 }
 
-uint16_t *FifoProcessorService::average(){
+void FifoProcessorService::loadAveragedData(uint16_t *buffer, int length) {
 
+    uint16_t * dataBuffer = this->readerService->getData();
+    process(dataBuffer);
+
+    int averageStep = sampleSize / length;
     int k = 0;
-    for(int i = 0; i < sampleSize; i+=averageStep){
+    for(int i = 0; i < sampleSize; i += averageStep){
         int avg = 0;
         for(int j = 0; j < averageStep; j++){
             avg += processedDataBuffer[i+j];
         }
-        this->averageDataBuffer[k] = avg/averageStep;
+        buffer[k] = avg / averageStep;
         k++;
     }
-
-    return this->averageDataBuffer;
-
 }
+
+//uint16_t *FifoProcessorService::average(){
+//
+//    int k = 0;
+//    for(int i = 0; i < sampleSize; i+=averageStep){
+//        int avg = 0;
+//        for(int j = 0; j < averageStep; j++){
+//            avg += processedDataBuffer[i+j];
+//        }
+//        this->averageDataBuffer[k] = avg/averageStep;
+//        k++;
+//    }
+//
+//    return this->averageDataBuffer;
+//
+//}

@@ -13,6 +13,7 @@
 #include "Services/SimpleReaderService.h"
 #include "Services/SimpleProcessorService.h"
 #include "Views/Widgets/SettingsDialog.h"
+#include "Views/Widgets/BlockVisualizer.h"
 
 
 namespace di = boost::di;
@@ -22,7 +23,7 @@ int main(int argc, char **argv) {
     const auto injector = di::make_injector(
         di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
         di::bind<IFifoReaderService>.to<MPDReaderService>(),
-        di::bind<IVisualizer>.to<LineVisualizer>(),
+        di::bind<IVisualizer>.to<BlockVisualizer>(),
         di::bind<ISettingsDialog>.to<SettingsDialog>(),
         di::bind<IConfigService>.to<SimpleConfigService>()
     );

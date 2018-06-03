@@ -20,10 +20,12 @@ public :
 
     //public Methods
     uint16_t * getProcessedData();
+    void loadAveragedData(uint16_t * buffer, int length);
+
 protected:
     //protected Methods
     void process(uint16_t * dataBuffer);
-    uint16_t *average();
+    //uint16_t * average();
 
     //protected Vars
     std::shared_ptr<IFifoReaderService> readerService;
@@ -31,9 +33,9 @@ protected:
     fftw_complex *fftInput, *fftOutput;
     fftw_plan fftPlan;
     uint16_t *processedDataBuffer;
-    uint16_t *averageDataBuffer;
+    //uint16_t *averageDataBuffer;
     int sampleSize;
-    int averageStep;
+    //int averageStep;
 };
 
 #endif //GTKMM_MVC_TEST_FIFOPROCESSORSERVICE_H

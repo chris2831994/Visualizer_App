@@ -19,7 +19,6 @@ public:
 
 protected:
     //signal handlers:
-    void on_button_quit();
     void on_button_settings();
 
     //child widgets:
@@ -27,7 +26,6 @@ protected:
     std::shared_ptr<IVisualizer> m_visualizer;
     std::shared_ptr<ISettingsDialog> m_settings;
     Gtk::ButtonBox m_ButtonBox;
-    Gtk::Button m_Button_Quit;
     Gtk::Button m_Button_Settings;
 
 

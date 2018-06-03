@@ -7,7 +7,6 @@
 VisualizerWindow::VisualizerWindow(std::shared_ptr<IVisualizer> m_visualizer, std::shared_ptr<ISettingsDialog> m_settings)
         : m_visualizer(m_visualizer),
           m_settings(m_settings),
-          m_Button_Quit("Quit"),
           m_Button_Settings("Settings"),
           m_VBox(Gtk::ORIENTATION_VERTICAL),
           m_ButtonBox(Gtk::ORIENTATION_HORIZONTAL)
@@ -18,18 +17,12 @@ VisualizerWindow::VisualizerWindow(std::shared_ptr<IVisualizer> m_visualizer, st
     m_VBox.pack_start(*m_visualizer, Gtk::PACK_EXPAND_WIDGET);
     m_Button_Settings.signal_clicked().connect(sigc::mem_fun(*this, &VisualizerWindow::on_button_settings));
     m_ButtonBox.add(m_Button_Settings);
-    m_Button_Quit.signal_clicked().connect(sigc::mem_fun(*this, &VisualizerWindow::on_button_quit));
-    m_ButtonBox.add(m_Button_Quit);
     m_VBox.pack_start((m_ButtonBox), Gtk::PACK_SHRINK);
     show_all_children();
 }
 
 VisualizerWindow::~VisualizerWindow(){
 
-}
-
-void VisualizerWindow::on_button_quit() {
-    exit(0);
 }
 
 void VisualizerWindow::on_button_settings() {

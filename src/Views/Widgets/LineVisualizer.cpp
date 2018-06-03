@@ -12,11 +12,12 @@
 LineVisualizer::LineVisualizer(std::shared_ptr<IFifoProcessorService> processorService) : processorService(processorService)
 {
     Glib::signal_timeout().connect(sigc::mem_fun(*this, &LineVisualizer::on_timeout), 1);
+    this->displayBuffer = new uint16_t[visualElementCount];
 }
 
 LineVisualizer::~LineVisualizer()
 {
-
+    delete(this->displayBuffer);
 }
 
 bool LineVisualizer::on_draw(const Cairo::RefPtr <Cairo::Context> &cr)
@@ -40,11 +41,9 @@ bool LineVisualizer::on_draw(const Cairo::RefPtr <Cairo::Context> &cr)
     cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
     cr->set_line_cap(Cairo::LINE_CAP_ROUND);
 
-    uint16_t * displayBuffer = this->processorService->getProcessedData();
-    //int length = sizeof(displayBuffer) / sizeof(uint16_t);
-    int length = 128;
+    this->processorService->loadAveragedData(this->displayBuffer, this->visualElementCount);
 
-    for(int i = 0; i < length; i++){
+    for(int i = 0; i < this->visualElementCount; i++){
         double x = 0.02 + i * 0.0075;
         double yUpper = 1.0 - (double)displayBuffer[i] / 200;
         double yLower = (double)displayBuffer[i] /200;

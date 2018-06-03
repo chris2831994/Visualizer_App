@@ -6,6 +6,8 @@
 #define GTKMM_MVC_TEST_BLOCKVISUALIZER_H
 
 
+#include "IVisualizer.h"
+
 class BlockVisualizer : public IVisualizer{
 public:
     BlockVisualizer(std::shared_ptr<IFifoProcessorService> processorService);
@@ -15,7 +17,9 @@ protected:
     bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
     bool on_timeout();
 
+    const int visualElementCount = 16;
     std::shared_ptr<IFifoProcessorService> processorService;
+    uint16_t * displayBuffer;
 };
 
 
