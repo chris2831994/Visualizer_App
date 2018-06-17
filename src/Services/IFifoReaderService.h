@@ -9,6 +9,7 @@ class IFifoReaderService {
 public:
 
     virtual uint16_t * getData() = 0;
+    virtual void reInit() = 0;
 
 protected:
 

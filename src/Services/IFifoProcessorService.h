@@ -11,6 +11,7 @@ public:
 
     virtual uint16_t * getProcessedData() = 0;
     virtual void loadAveragedData(uint16_t * buffer, int length) = 0;
+    virtual void reInit() = 0;
 
 protected:
 

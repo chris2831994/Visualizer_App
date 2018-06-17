@@ -1,9 +1,8 @@
 //
-// Created by chris on 5/31/18.
+// Created by chris on 6/17/18.
 //
 
-#include "VisualizerWindowFactory.h"
-#include "../Views/VisualizerWindow.h"
+#include "VisualizerWidgetFactory.h"
 #include <gtkmm.h>
 #include "../../include/boost_di.hpp"
 #include "../Services/IFifoProcessorService.h"
@@ -22,19 +21,28 @@
 
 namespace di = boost::di;
 
-void VisualizerWindowFactory::createAndRunVisualizerWindow() {
+std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createLineVisualizer(){
 
     const auto injector = di::make_injector(
             di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
-    di::bind<IFifoReaderService>.to<MPDReaderService>(),
-            di::bind<IVisualizer>.to<BlockVisualizer>(),
-            di::bind<ISettingsDialog>.to<SettingsDialog>(),
+            di::bind<IFifoReaderService>.to<MPDReaderService>(),
             di::bind<IConfigService>.to<SimpleConfigService>()
     );
 
-    auto app = Gtk::Application::create("org.gtkmm.asd");
+    std::unique_ptr<IVisualizer> vis = injector.create<std::unique_ptr<LineVisualizer>>();
 
-    auto mainWindow = injector.create<std::unique_ptr<VisualizerWindow>>();
+    return vis;
+}
 
-    app->run(*mainWindow);
+std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createBlockVisualizer(){
+
+    const auto injector = di::make_injector(
+            di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
+            di::bind<IFifoReaderService>.to<MPDReaderService>(),
+            di::bind<IConfigService>.to<SimpleConfigService>()
+    );
+
+    std::unique_ptr<IVisualizer> vis = injector.create<std::unique_ptr<BlockVisualizer>>();
+
+    return vis;
 }

@@ -4,13 +4,17 @@
 
 #include "SettingsDialog.h"
 
-SettingsDialog::SettingsDialog(std::shared_ptr<IConfigService> configService)
+SettingsDialog::SettingsDialog(std::shared_ptr<IConfigService> configService,
+                               std::shared_ptr<IFifoReaderService> readerService,
+                               std::shared_ptr<IFifoProcessorService> processorService)
         : configService(configService),
-        m_Button_Cancel("Cancel"),
-        m_Button_Save("Save"),
-        m_Frame_FileName("Fifo Filename"),
-        m_Frame_DefaultVisualizer("Default Visualizer"),
-        m_Frame_SampleSize("Sample Size"),
+          readerService(readerService),
+          processorService(processorService),
+          m_Button_Cancel("Cancel"),
+          m_Button_Save("Save"),
+          m_Frame_FileName("Fifo Filename"),
+          m_Frame_DefaultVisualizer("Default Visualizer"),
+          m_Frame_SampleSize("Sample Size"),
           m_VBox(Gtk::ORIENTATION_VERTICAL)
 {
     auto config = configService->getConfig();
@@ -31,11 +35,6 @@ SettingsDialog::SettingsDialog(std::shared_ptr<IConfigService> configService)
     m_ComboBox_DefaultVisualizer.set_model(m_refTreeModelDefaultVisualizer);
 
     //fill sample size combo box
-    Gtk::TreeModel::Row sampleRow_1 = *(m_refTreeModelSampleSize->append());
-    sampleRow_1[sampleSizeColumns.m_col_val] = 512;
-    sampleRow_1[sampleSizeColumns.m_col_desc] = "512";
-    if(config->getSampleSize() == 512) m_ComboBox_SampleSize.set_active(sampleRow_1);
-
     Gtk::TreeModel::Row sampleRow_2 = *(m_refTreeModelSampleSize->append());
     sampleRow_2[sampleSizeColumns.m_col_val] = 1024;
     sampleRow_2[sampleSizeColumns.m_col_desc] = "1024";
@@ -45,6 +44,26 @@ SettingsDialog::SettingsDialog(std::shared_ptr<IConfigService> configService)
     sampleRow_3[sampleSizeColumns.m_col_val] = 2048;
     sampleRow_3[sampleSizeColumns.m_col_desc] = "2048";
     if(config->getSampleSize() == 2048) m_ComboBox_SampleSize.set_active(sampleRow_3);
+
+    Gtk::TreeModel::Row sampleRow_4 = *(m_refTreeModelSampleSize->append());
+    sampleRow_4[sampleSizeColumns.m_col_val] = 4096;
+    sampleRow_4[sampleSizeColumns.m_col_desc] = "4096";
+    if(config->getSampleSize() == 4096) m_ComboBox_SampleSize.set_active(sampleRow_4);
+
+    Gtk::TreeModel::Row sampleRow_5 = *(m_refTreeModelSampleSize->append());
+    sampleRow_5[sampleSizeColumns.m_col_val] = 8192;
+    sampleRow_5[sampleSizeColumns.m_col_desc] = "8192";
+    if(config->getSampleSize() == 8192) m_ComboBox_SampleSize.set_active(sampleRow_5);
+
+    Gtk::TreeModel::Row sampleRow_6 = *(m_refTreeModelSampleSize->append());
+    sampleRow_6[sampleSizeColumns.m_col_val] = 16384;
+    sampleRow_6[sampleSizeColumns.m_col_desc] = "16384";
+    if(config->getSampleSize() == 16384) m_ComboBox_SampleSize.set_active(sampleRow_6);
+
+    Gtk::TreeModel::Row sampleRow_7 = *(m_refTreeModelSampleSize->append());
+    sampleRow_7[sampleSizeColumns.m_col_val] = 32768;
+    sampleRow_7[sampleSizeColumns.m_col_desc] = "32768";
+    if(config->getSampleSize() == 32768) m_ComboBox_SampleSize.set_active(sampleRow_7);
 
     m_ComboBox_SampleSize.pack_start(sampleSizeColumns.m_col_desc);
 
@@ -110,6 +129,8 @@ void SettingsDialog::on_button_save() {
             config->setDefaultVisualizer(row[defaultVisualizerColumns.m_col_val]);
         }
     }
+    readerService->reInit();
+    processorService->reInit();
     configService->writeConfig();
     hide();
 }

@@ -10,10 +10,14 @@
 #include "ISettingsDialog.h"
 #include "../../Services/IConfigService.h"
 #include "ComboBoxModels/IntegerColumn.h"
+#include "../../Services/IFifoReaderService.h"
+#include "../../Services/IFifoProcessorService.h"
 
 class SettingsDialog : public ISettingsDialog {
 public:
-    SettingsDialog(std::shared_ptr<IConfigService> configService);
+    SettingsDialog(std::shared_ptr<IConfigService> configService,
+                   std::shared_ptr<IFifoReaderService> readerService,
+                   std::shared_ptr<IFifoProcessorService> processorService);
     ~SettingsDialog();
 
 protected:
@@ -23,6 +27,8 @@ protected:
 
     //services
     std::shared_ptr<IConfigService> configService;
+    std::shared_ptr<IFifoReaderService> readerService;
+    std::shared_ptr<IFifoProcessorService> processorService;
 
     //combo box models
     IntegerColumn sampleSizeColumns;

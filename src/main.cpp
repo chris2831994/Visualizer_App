@@ -14,46 +14,29 @@
 #include "Services/SimpleProcessorService.h"
 #include "Views/Widgets/SettingsDialog.h"
 #include "Views/Widgets/BlockVisualizer.h"
+#include "Util/VisualizerWindowFactory.h"
+#include "Util/VisualizerWidgetFactory.h"
 
 
 namespace di = boost::di;
 
 int main(int argc, char **argv) {
 
-    const auto injector = di::make_injector(
-        di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
-        di::bind<IFifoReaderService>.to<MPDReaderService>(),
-        di::bind<IVisualizer>.to<BlockVisualizer>(),
-        di::bind<ISettingsDialog>.to<SettingsDialog>(),
-        di::bind<IConfigService>.to<SimpleConfigService>()
-    );
+    //integration of widget example
+//    auto app = Gtk::Application::create(argc, argv, "org.gtkmm.asd");
+//
+//    Gtk::Window window;
+//    window.set_default_size(200, 200);
+//
+//    std::unique_ptr<IVisualizer> vis = VisualizerWidgetFactory::createBlockVisualizer();
+//
+//    window.add(*vis);
+//
+//    window.show_all_children();
+//
+//    return app->run(window);
 
-    auto app = Gtk::Application::create(argc, argv, "org.gtkmm.asd");
+    //running standalone app example
+    VisualizerWindowFactory::createAndRunVisualizerWindow();
 
-    auto mainWindow = injector.create<std::unique_ptr<VisualizerWindow>>();
-
-    return app->run(*mainWindow);
 }
-
-//    auto refBuilder = Gtk::Builder::create();
-//    try
-//    {
-//        refBuilder->add_from_file("test.glade");
-//    }
-//    catch(const Glib::FileError& ex)
-//    {
-//        std::cerr << "FileError: " << ex.what() << std::endl;
-//        return 1;
-//    }
-//    catch(const Glib::MarkupError& ex)
-//    {
-//        std::cerr << "MarkupError: " << ex.what() << std::endl;
-//        return 1;
-//    }
-//    catch(const Gtk::BuilderError& ex)
-//    {
-//        std::cerr << "BuilderError: " << ex.what() << std::endl;
-//        return 1;
-//    }
-
-//    refBuilder->get_widget("MainWindow", mainWindow);

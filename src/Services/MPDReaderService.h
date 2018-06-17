@@ -14,6 +14,7 @@ public:
     MPDReaderService(std::shared_ptr<IConfigService> configService);
     ~MPDReaderService();
     uint16_t * getData();
+    void reInit();
 protected:
 
     std::shared_ptr<IConfigService> configService;

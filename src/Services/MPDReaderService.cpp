@@ -20,7 +20,6 @@ MPDReaderService::MPDReaderService(std::shared_ptr<IConfigService> configService
 
 MPDReaderService::~MPDReaderService() {
     close(this->fifo);
-    //free(readingBuffer);
     delete(readingBuffer);
 }
 
@@ -35,4 +34,18 @@ void MPDReaderService::readData() {
 uint16_t * MPDReaderService::getData() {
     readData();
     return this->readingBuffer;
+}
+
+void MPDReaderService::reInit(){
+
+    //close access to old fifo file
+    close(this->fifo);
+
+    //free bufer memory
+    delete(readingBuffer);
+
+    VisualizerConfig * config = configService->getConfig();
+    //opens fifo file, settings O_NONBLOCK flag stops system from blocking calling thread
+    this->fifo = open(config->getFileName().c_str(), O_RDONLY | O_NONBLOCK);
+    this->readingBuffer = new uint16_t[config->getSampleSize()];
 }

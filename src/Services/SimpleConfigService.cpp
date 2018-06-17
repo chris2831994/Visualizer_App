@@ -7,7 +7,7 @@
 using namespace std;
 
 SimpleConfigService::SimpleConfigService() {
-    this->config = new VisualizerConfig("/tmp/mpd.fifo", 1024, 1);
+    this->config = new VisualizerConfig("/tmp/mpd.fifo", 4096, 1);
 }
 
 SimpleConfigService::~SimpleConfigService() {
