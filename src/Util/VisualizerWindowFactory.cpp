@@ -25,11 +25,14 @@ namespace di = boost::di;
 
 void VisualizerWindowFactory::createAndRunVisualizerWindow() {
 
+
     const auto injector = di::make_injector(
             di::bind<IFifoProcessorService>.to<TimeDomainProcessorService>(),
-    di::bind<IFifoReaderService>.to<MPDReaderService>(),
+            di::bind<IFifoReaderService>.to<MPDReaderService>(),
             di::bind<IVisualizer>.to<BlockVisualizer>(),
             di::bind<ISettingsDialog>.to<SettingsDialog>(),
+            di::bind<int>.to(4096),
+            di::bind<std::string>.to("/tmp/mpd.fifo"),
             di::bind<IConfigService>.to<SimpleConfigService>()
     );
 

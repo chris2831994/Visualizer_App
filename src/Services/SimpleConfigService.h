@@ -6,6 +6,7 @@
 #define GTKMM_MVC_TEST_SIMPLECONFIGSERVICE_H
 
 #include "IConfigService.h"
+#include <memory>
 
 class SimpleConfigService : public IConfigService{
 public :
