@@ -17,7 +17,7 @@ protected:
     bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
     bool on_timeout();
 
-    const int visualElementCount = 16;
+    const int visualElementCount = 32;
     std::shared_ptr<IFifoProcessorService> processorService;
     uint16_t * displayBuffer;
 };
