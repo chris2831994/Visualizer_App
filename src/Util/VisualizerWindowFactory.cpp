@@ -19,13 +19,14 @@
 #include "../Services/SimpleProcessorService.h"
 #include "../Views/Widgets/SettingsDialog.h"
 #include "../Views/Widgets/BlockVisualizer.h"
+#include "../Services/TimeDomainProcessorService.h"
 
 namespace di = boost::di;
 
 void VisualizerWindowFactory::createAndRunVisualizerWindow() {
 
     const auto injector = di::make_injector(
-            di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
+            di::bind<IFifoProcessorService>.to<TimeDomainProcessorService>(),
     di::bind<IFifoReaderService>.to<MPDReaderService>(),
             di::bind<IVisualizer>.to<BlockVisualizer>(),
             di::bind<ISettingsDialog>.to<SettingsDialog>(),

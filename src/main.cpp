@@ -23,20 +23,20 @@ namespace di = boost::di;
 int main(int argc, char **argv) {
 
     //integration of widget example
-//    auto app = Gtk::Application::create(argc, argv, "org.gtkmm.asd");
-//
-//    Gtk::Window window;
-//    window.set_default_size(200, 200);
-//
-//    std::unique_ptr<IVisualizer> vis = VisualizerWidgetFactory::createBlockVisualizer();
-//
-//    window.add(*vis);
-//
-//    window.show_all_children();
-//
-//    return app->run(window);
+    auto app = Gtk::Application::create(argc, argv, "org.gtkmm.asd");
+
+    Gtk::Window window;
+    window.set_default_size(200, 200);
+
+    std::unique_ptr<IVisualizer> vis = VisualizerWidgetFactory::createLineVisualizer(45, "/tmp/mpd.fifo");
+
+    window.add(*vis);
+
+    window.show_all_children();
+
+    return app->run(window);
 
     //running standalone app example
-    VisualizerWindowFactory::createAndRunVisualizerWindow();
-
+    //VisualizerWindowFactory::createAndRunVisualizerWindow();
+//
 }

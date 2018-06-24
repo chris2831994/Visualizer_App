@@ -192,8 +192,8 @@ void FifoProcessorService::process(uint16_t *dataBuffer) {
                     + fftOutput_seg7[i][1];
         avgIm = avgIm / 8;
 
-        int sq = sqrt(pow(avgRe, 2) + pow(avgIm, 2));
-        int res = round(20*log10(sq));
+        //int sq = sqrt(pow(avgRe, 2) + pow(avgIm, 2));
+        int res = round(20*log10(avgRe));
         if(res < 0) res = 0;
         this->processedDataBuffer_seg0[i] = res;
         //std::cout << res << " ";

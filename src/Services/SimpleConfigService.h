@@ -9,7 +9,8 @@
 
 class SimpleConfigService : public IConfigService{
 public :
-    SimpleConfigService();
+    //SimpleConfigService();
+    SimpleConfigService(int sampleSize, std::string fifoPath);
     ~SimpleConfigService();
     VisualizerConfig * getConfig();
     void writeConfig();

@@ -6,8 +6,12 @@
 #include <iostream>
 using namespace std;
 
-SimpleConfigService::SimpleConfigService() {
-    this->config = new VisualizerConfig("/tmp/mpd.fifo", 4096, 1);
+//SimpleConfigService::SimpleConfigService() {
+//    this->config = new VisualizerConfig("/tmp/mpd.fifo", 4096, 1);
+//}
+
+SimpleConfigService::SimpleConfigService(int sampleSize, std::string fifoPath){
+    this->config = new VisualizerConfig(fifoPath, sampleSize, 1);
 }
 
 SimpleConfigService::~SimpleConfigService() {
