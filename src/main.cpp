@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
     Gtk::Window window;
     window.set_default_size(200, 200);
 
+    //create a block visualizer using the signal in time domain
     std::unique_ptr<IVisualizer> vis = VisualizerWidgetFactory::createBlockVisualizer(45, "/tmp/mpd.fifo", true);
 
     window.add(*vis);
