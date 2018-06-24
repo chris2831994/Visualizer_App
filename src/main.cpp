@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     Gtk::Window window;
     window.set_default_size(200, 200);
 
-    std::unique_ptr<IVisualizer> vis = VisualizerWidgetFactory::createLineVisualizer(45, "/tmp/mpd.fifo");
+    std::unique_ptr<IVisualizer> vis = VisualizerWidgetFactory::createBlockVisualizer(45, "/tmp/mpd.fifo", true);
 
     window.add(*vis);
 

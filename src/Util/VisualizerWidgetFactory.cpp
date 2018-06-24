@@ -24,53 +24,58 @@ namespace di = boost::di;
 
 std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createLineVisualizer(int sampleSize, std::string fifoPath, bool useTimeDomain){
 
-    auto injector;
     if(useTimeDomain){
-            injector = di::make_injector(
+            const auto injector = di::make_injector(
                 di::bind<IFifoProcessorService>.to<TimeDomainProcessorService>(),
                 di::bind<IFifoReaderService>.to<MPDReaderService>(),
                 di::bind<int>.to(sampleSize),
                 di::bind<std::string>.to(fifoPath),
                 di::bind<IConfigService>.to<SimpleConfigService>()
         );
+        std::unique_ptr<IVisualizer> vis = injector.create<std::unique_ptr<LineVisualizer>>();
+
+
+        return vis;
     } else {
-            injector = di::make_injector(
+            const auto injector = di::make_injector(
                 di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
                 di::bind<IFifoReaderService>.to<MPDReaderService>(),
                 di::bind<int>.to(sampleSize),
                 di::bind<std::string>.to(fifoPath),
                 di::bind<IConfigService>.to<SimpleConfigService>()
         );
+        std::unique_ptr<IVisualizer> vis = injector.create<std::unique_ptr<LineVisualizer>>();
+
+
+        return vis;
     }
 
-    std::unique_ptr<IVisualizer> vis = injector.create<std::unique_ptr<LineVisualizer>>();
 
-
-    return vis;
 }
 
 std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createBlockVisualizer(int sampleSize, std::string fifoPath, bool useTimeDomain){
 
-    auto injector;
     if(useTimeDomain){
-        injector = di::make_injector(
+        const auto injector = di::make_injector(
                 di::bind<IFifoProcessorService>.to<TimeDomainProcessorService>(),
                 di::bind<IFifoReaderService>.to<MPDReaderService>(),
                 di::bind<int>.to(sampleSize),
                 di::bind<std::string>.to(fifoPath),
                 di::bind<IConfigService>.to<SimpleConfigService>()
         );
+        std::unique_ptr<IVisualizer> vis = injector.create<std::unique_ptr<BlockVisualizer>>();
+
+        return vis;
     } else {
-        injector = di::make_injector(
+        const auto injector = di::make_injector(
                 di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
                 di::bind<IFifoReaderService>.to<MPDReaderService>(),
                 di::bind<int>.to(sampleSize),
                 di::bind<std::string>.to(fifoPath),
                 di::bind<IConfigService>.to<SimpleConfigService>()
         );
+        std::unique_ptr<IVisualizer> vis = injector.create<std::unique_ptr<BlockVisualizer>>();
+
+        return vis;
     }
-
-    std::unique_ptr<IVisualizer> vis = injector.create<std::unique_ptr<BlockVisualizer>>();
-
-    return vis;
 }
