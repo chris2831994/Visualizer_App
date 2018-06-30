@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     window.set_default_size(200, 200);
 
     //create a block visualizer using the signal in time domain
-    std::unique_ptr<IVisualizer> vis = VisualizerWidgetFactory::createBlockVisualizer(1024, "/tmp/mpd.fifo", false);
+    std::unique_ptr<IVisualizer> vis = VisualizerWidgetFactory::createBlockVisualizer("/tmp/mpd.fifo", 44100, 40, false);
 
     window.add(*vis);
 

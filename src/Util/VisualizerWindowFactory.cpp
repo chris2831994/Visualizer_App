@@ -25,13 +25,15 @@ namespace di = boost::di;
 
 void VisualizerWindowFactory::createAndRunVisualizerWindow() {
 
+    uint8_t fps = 25;
 
     const auto injector = di::make_injector(
-            di::bind<IFifoProcessorService>.to<TimeDomainProcessorService>(),
+            di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
             di::bind<IFifoReaderService>.to<MPDReaderService>(),
             di::bind<IVisualizer>.to<BlockVisualizer>(),
             di::bind<ISettingsDialog>.to<SettingsDialog>(),
-            di::bind<int>.to(4096),
+            di::bind<int>.to(44100),
+            di::bind<uint8_t>.to(fps),
             di::bind<std::string>.to("/tmp/mpd.fifo"),
             di::bind<IConfigService>.to<SimpleConfigService>()
     );

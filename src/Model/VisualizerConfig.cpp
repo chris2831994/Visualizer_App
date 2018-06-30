@@ -4,16 +4,14 @@
 
 #include "VisualizerConfig.h"
 
-VisualizerConfig::VisualizerConfig(std::string fileName, int sampleSize, int defaultVisualizer)
-    : fileName(fileName), sampleSize(sampleSize), defaultVisualizer(defaultVisualizer)
-{}
+VisualizerConfig::VisualizerConfig(std::string fileName, int sampleRate, uint8_t fpsCount)
+    : fileName(fileName), sampleSize(sampleSize), sampleRate(sampleRate), fpsCount(fpsCount)
+{
+    sampleSize = sampleRate / fpsCount;
+}
 
 int VisualizerConfig::getSampleSize(){
     return this->sampleSize;
-}
-
-void VisualizerConfig::setSampleSize(int value){
-    this->sampleSize = value;
 }
 
 std::string VisualizerConfig::getFileName(){
@@ -24,10 +22,20 @@ void VisualizerConfig::setFileName(std::string value){
     this->fileName = value;
 }
 
-int VisualizerConfig::getDefaultVisualizer() {
-    return this->defaultVisualizer;
+int VisualizerConfig::getSampleRate() {
+    return this->sampleRate;
 }
 
-void VisualizerConfig::setDefaultVisualizer(int value) {
-    this->defaultVisualizer = value;
+void VisualizerConfig::setSampleRate(int value){
+    this->sampleRate = value;
+    this->sampleSize = (sampleRate / fpsCount);
+}
+
+void VisualizerConfig::setFpsCount(uint8_t value) {
+    this->fpsCount = value;
+    this->sampleSize = (sampleRate / fpsCount);
+}
+
+uint8_t VisualizerConfig::getFpsCount(){
+    return fpsCount;
 }

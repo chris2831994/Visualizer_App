@@ -18,7 +18,7 @@ FifoProcessorService::FifoProcessorService(std::shared_ptr<IFifoReaderService> r
     VisualizerConfig * config = configService->getConfig();
     this->sampleSize = config->getSampleSize();
 
-      this->processedDataBuffer = new uint16_t[sampleSize/2 +1];
+      this->processedDataBuffer = new uint16_t[sampleSize/2];
       this->fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (sampleSize));
       this->realInput = new double[sampleSize];
       this->fftPlan = fftw_plan_dft_r2c_1d(sampleSize, realInput, fftOutput, FFTW_ESTIMATE_PATIENT);
@@ -36,17 +36,27 @@ FifoProcessorService::~FifoProcessorService() {
 
 void FifoProcessorService::process(uint16_t *dataBuffer) {
 
+    //apply hamming window
+    for (int i = 0; i < sampleSize; i++) {
+        double multiplier = 0.54 - 0.46 * cos(2*M_PI*i/(sampleSize-1));
+        dataBuffer[i] = multiplier * dataBuffer[i];
+    }
+
+    //load data for fft
     for(int i = 0; i < sampleSize; i++){
         realInput[i] = dataBuffer[i];
     }
 
+    //execute fft
     fftw_execute(fftPlan);
 
-    for(int i = 0; i < sampleSize/2 +1; i++){
+    for(int i = 0; i < sampleSize/2; i++){
         //convert to polar notation
         int mag = sqrt(fftOutput[i][0] * fftOutput[i][0] + fftOutput[i][1] + fftOutput[i][1]);
         //convert to dB Scale
         processedDataBuffer[i] = round(20*log10(mag));
+//                double win = 1 - abs((fftOutput[i][0] - sampleSize-1/2)/(sampleSize-1/2));
+        //processedDataBuffer[i] = round(1127 * log(mag/700 + 1));
     }
 
 }
@@ -64,15 +74,15 @@ void FifoProcessorService::loadAveragedData(uint16_t *buffer, int length) {
 
     int averageStep = (sampleSize/ 2) / length;
 
-    if(averageStep == 1){
-        for(int i = 1; i < (sampleSize/2); i++){
-            buffer[i] = processedDataBuffer[i];
-        }
-        return;
-    }
+//    if(averageStep == 1){
+//        for(int i = 0; i < (sampleSize/2); i++){
+//            buffer[i] = processedDataBuffer[i];
+//        }
+//        return;
+//    }
 
     int k = 0;
-    for(int i = 1; i < (sampleSize/2); i += averageStep){
+    for(int i = 0; i < (sampleSize/2); i += averageStep){
         int avg = 0;
         for(int j = 0; j < averageStep; j++){
             avg += processedDataBuffer[i+j];
@@ -93,7 +103,7 @@ void FifoProcessorService::reInit() {
     //allocate new memory with config parameters
     VisualizerConfig * config = configService->getConfig();
     this->sampleSize = config->getSampleSize();
-    this->processedDataBuffer = new uint16_t[sampleSize/2 + 1];
+    this->processedDataBuffer = new uint16_t[sampleSize/2];
     realInput = new double[sampleSize];
     this->fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (sampleSize));
     this->fftPlan = fftw_plan_dft_1d(sampleSize, fftInput, fftOutput, FFTW_FORWARD, FFTW_EXHAUSTIVE);

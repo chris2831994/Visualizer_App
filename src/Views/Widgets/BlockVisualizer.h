@@ -7,10 +7,11 @@
 
 
 #include "IVisualizer.h"
+#include "../../Services/IConfigService.h"
 
 class BlockVisualizer : public IVisualizer{
 public:
-    BlockVisualizer(std::shared_ptr<IFifoProcessorService> processorService);
+    BlockVisualizer(std::shared_ptr<IFifoProcessorService> processorService, std::shared_ptr<IConfigService> configService);
     ~BlockVisualizer();
 
 protected:
@@ -19,6 +20,7 @@ protected:
 
     const int visualElementCount = 32;
     std::shared_ptr<IFifoProcessorService> processorService;
+    std::shared_ptr<IConfigService> configService;
     uint16_t * displayBuffer;
 };
 

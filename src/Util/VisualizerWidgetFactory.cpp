@@ -22,13 +22,14 @@
 
 namespace di = boost::di;
 
-std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createLineVisualizer(int sampleSize, std::string fifoPath, bool useTimeDomain){
+std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createLineVisualizer(std::string fifoPath, int sampleRate, uint8_t fpsCount, bool useTimeDomain){
 
     if(useTimeDomain){
             const auto injector = di::make_injector(
                 di::bind<IFifoProcessorService>.to<TimeDomainProcessorService>(),
                 di::bind<IFifoReaderService>.to<MPDReaderService>(),
-                di::bind<int>.to(sampleSize),
+                di::bind<int>.to(sampleRate),
+                di::bind<uint8_t>.to(fpsCount),
                 di::bind<std::string>.to(fifoPath),
                 di::bind<IConfigService>.to<SimpleConfigService>()
         );
@@ -40,7 +41,8 @@ std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createLineVisualizer(int s
             const auto injector = di::make_injector(
                 di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
                 di::bind<IFifoReaderService>.to<MPDReaderService>(),
-                di::bind<int>.to(sampleSize),
+                di::bind<int>.to(sampleRate),
+                di::bind<uint8_t>.to(fpsCount),
                 di::bind<std::string>.to(fifoPath),
                 di::bind<IConfigService>.to<SimpleConfigService>()
         );
@@ -53,13 +55,14 @@ std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createLineVisualizer(int s
 
 }
 
-std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createBlockVisualizer(int sampleSize, std::string fifoPath, bool useTimeDomain){
+std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createBlockVisualizer(std::string fifoPath, int sampleRate, uint8_t fpsCount, bool useTimeDomain){
 
     if(useTimeDomain){
         const auto injector = di::make_injector(
                 di::bind<IFifoProcessorService>.to<TimeDomainProcessorService>(),
                 di::bind<IFifoReaderService>.to<MPDReaderService>(),
-                di::bind<int>.to(sampleSize),
+                di::bind<int>.to(sampleRate),
+                di::bind<uint8_t>.to(fpsCount),
                 di::bind<std::string>.to(fifoPath),
                 di::bind<IConfigService>.to<SimpleConfigService>()
         );
@@ -70,7 +73,8 @@ std::unique_ptr<IVisualizer> VisualizerWidgetFactory::createBlockVisualizer(int 
         const auto injector = di::make_injector(
                 di::bind<IFifoProcessorService>.to<FifoProcessorService>(),
                 di::bind<IFifoReaderService>.to<MPDReaderService>(),
-                di::bind<int>.to(sampleSize),
+                di::bind<int>.to(sampleRate),
+                di::bind<uint8_t>.to(fpsCount),
                 di::bind<std::string>.to(fifoPath),
                 di::bind<IConfigService>.to<SimpleConfigService>()
         );

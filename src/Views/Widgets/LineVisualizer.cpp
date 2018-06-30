@@ -9,9 +9,11 @@
 #include "LineVisualizer.h"
 #include <random>
 
-LineVisualizer::LineVisualizer(std::shared_ptr<IFifoProcessorService> processorService) : processorService(processorService)
+LineVisualizer::LineVisualizer(std::shared_ptr<IFifoProcessorService> processorService, std::shared_ptr<IConfigService> configService)
+        : processorService(processorService),
+          configService(configService)
 {
-    Glib::signal_timeout().connect(sigc::mem_fun(*this, &LineVisualizer::on_timeout), 1);
+    Glib::signal_timeout().connect(sigc::mem_fun(*this, &LineVisualizer::on_timeout), configService->getConfig()->getFpsCount());
     this->displayBuffer = new uint16_t[visualElementCount];
 }
 

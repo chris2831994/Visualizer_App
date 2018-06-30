@@ -31,21 +31,21 @@ protected:
     std::shared_ptr<IFifoProcessorService> processorService;
 
     //combo box models
-    IntegerColumn sampleSizeColumns;
-    IntegerColumn defaultVisualizerColumns;
+    IntegerColumn sampleRateColumns;
+    IntegerColumn fpsCountColumns;
 
     //child widgets
     Gtk::Box m_VBox;
-    Gtk::Frame m_Frame_FileName, m_Frame_SampleSize, m_Frame_DefaultVisualizer;
+    Gtk::Frame m_Frame_FileName, m_Frame_SampleRate, m_Frame_FpsCount;
     //Gtk::Label m_Label_FileName, m_Label_SampleSize, m_Label_DefaultVisualizer;
     Gtk::Entry m_Entry_FileName;
-    Gtk::ComboBox m_ComboBox_SampleSize, m_ComboBox_DefaultVisualizer;
+    Gtk::ComboBox m_ComboBox_SampleRate, m_ComboBox_FpsCount;
     Gtk::ButtonBox m_ButtonBox;
     Gtk::Button m_Button_Cancel;
     Gtk::Button m_Button_Save;
 
-    Glib::RefPtr<Gtk::ListStore> m_refTreeModelSampleSize;
-    Glib::RefPtr<Gtk::ListStore> m_refTreeModelDefaultVisualizer;
+    Glib::RefPtr<Gtk::ListStore> m_refTreeModelSampleRate;
+    Glib::RefPtr<Gtk::ListStore> m_refTreeModelFpsCount;
 };
 
 #endif //GTKMM_MVC_TEST_SETTINGSDIALOG_H

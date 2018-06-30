@@ -3,11 +3,12 @@
 
 #include <gtkmm/drawingarea.h>
 #include "IVisualizer.h"
+#include "../../Services/IConfigService.h"
 
 class LineVisualizer : public IVisualizer
 {
 public:
-    LineVisualizer(std::shared_ptr<IFifoProcessorService> processorService);
+    LineVisualizer(std::shared_ptr<IFifoProcessorService> processorService, std::shared_ptr<IConfigService> configService);
     ~LineVisualizer();
 
 protected:
@@ -16,6 +17,7 @@ protected:
 
     const int visualElementCount = 128;
     std::shared_ptr<IFifoProcessorService> processorService;
+    std::shared_ptr<IConfigService> configService;
     uint16_t * displayBuffer;
 };
 

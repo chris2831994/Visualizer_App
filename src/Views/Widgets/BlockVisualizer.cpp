@@ -8,10 +8,11 @@
 #include <iostream>
 #include "BlockVisualizer.h"
 
-BlockVisualizer::BlockVisualizer(std::shared_ptr <IFifoProcessorService> processorService)
-    : processorService(processorService)
+BlockVisualizer::BlockVisualizer(std::shared_ptr <IFifoProcessorService> processorService, std::shared_ptr<IConfigService> configService)
+    : processorService(processorService),
+      configService(configService)
 {
-    Glib::signal_timeout().connect(sigc::mem_fun(*this, &BlockVisualizer::on_timeout), 50);
+    Glib::signal_timeout().connect(sigc::mem_fun(*this, &BlockVisualizer::on_timeout), configService->getConfig()->getFpsCount());
     this->displayBuffer = new uint16_t[visualElementCount];
 }
 
