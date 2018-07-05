@@ -11,7 +11,7 @@
 class SimpleConfigService : public IConfigService{
 public :
     //SimpleConfigService();
-    SimpleConfigService(int sampleSize, std::string fifoPath);
+    SimpleConfigService(int sampleRate, std::string fifoPath, uint8_t fps);
     ~SimpleConfigService();
     VisualizerConfig * getConfig();
     void writeConfig();

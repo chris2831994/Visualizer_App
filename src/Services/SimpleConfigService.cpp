@@ -6,8 +6,8 @@
 #include <iostream>
 using namespace std;
 
-SimpleConfigService::SimpleConfigService(int sampleSize, std::string fifoPath){
-    this->config = new VisualizerConfig(fifoPath, 44100, 25);
+SimpleConfigService::SimpleConfigService(int sampleRate, std::string fifoPath, uint8_t fps){
+    this->config = new VisualizerConfig(fifoPath, sampleRate, fps);
 }
 
 SimpleConfigService::~SimpleConfigService() {
@@ -23,5 +23,5 @@ void SimpleConfigService::writeConfig(){
     cout << "FifoFile :     " << config->getFileName() << endl;
     cout << "SampleSize :   " << config->getSampleSize() << endl;
     cout << "SampleRate :   " << config->getSampleRate() << endl;
-    cout << "Vis Fps :   " << config->getFpsCount() << endl;
+    cout << "Vis Fps :      " << (int)config->getFpsCount() << endl;
 }

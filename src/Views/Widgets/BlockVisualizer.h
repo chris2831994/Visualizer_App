@@ -21,7 +21,7 @@ protected:
     const int visualElementCount = 32;
     std::shared_ptr<IFifoProcessorService> processorService;
     std::shared_ptr<IConfigService> configService;
-    uint16_t * displayBuffer;
+    double * displayBuffer;
 };
 
 

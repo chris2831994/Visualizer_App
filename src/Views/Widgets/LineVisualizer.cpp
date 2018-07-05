@@ -14,7 +14,7 @@ LineVisualizer::LineVisualizer(std::shared_ptr<IFifoProcessorService> processorS
           configService(configService)
 {
     Glib::signal_timeout().connect(sigc::mem_fun(*this, &LineVisualizer::on_timeout), configService->getConfig()->getFpsCount());
-    this->displayBuffer = new uint16_t[visualElementCount];
+    this->displayBuffer = new double[visualElementCount];
 }
 
 LineVisualizer::~LineVisualizer()
@@ -47,7 +47,7 @@ bool LineVisualizer::on_draw(const Cairo::RefPtr <Cairo::Context> &cr)
 
     for(int i = 0; i < this->visualElementCount; i++){
         double x = 0.02 + i * 0.0075;
-        double yUpper = 1.0 - (double)displayBuffer[i] / 160;
+        double yUpper = 1.0 - displayBuffer[i] / 160;
         //double yLower = (double)displayBuffer[i] / 140;
 
         double yLower = 0.8;

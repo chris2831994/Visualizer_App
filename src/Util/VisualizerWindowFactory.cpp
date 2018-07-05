@@ -14,16 +14,14 @@
 #include "../Views/Widgets/IVisualizer.h"
 #include "../Views/Widgets/LineVisualizer.h"
 #include "../Views/VisualizerWindow.h"
-#include "../Views/SettingsWindow.h"
 #include "../Services/SimpleReaderService.h"
 #include "../Services/SimpleProcessorService.h"
 #include "../Views/Widgets/SettingsDialog.h"
 #include "../Views/Widgets/BlockVisualizer.h"
-#include "../Services/TimeDomainProcessorService.h"
 
 namespace di = boost::di;
 
-void VisualizerWindowFactory::createAndRunVisualizerWindow() {
+std::unique_ptr<VisualizerWindow> VisualizerWindowFactory::createVisualizerWindow() {
 
     uint8_t fps = 25;
 
@@ -38,9 +36,7 @@ void VisualizerWindowFactory::createAndRunVisualizerWindow() {
             di::bind<IConfigService>.to<SimpleConfigService>()
     );
 
-    auto app = Gtk::Application::create("org.gtkmm.asd");
+    auto window = injector.create<std::unique_ptr<VisualizerWindow>>();
 
-    auto mainWindow = injector.create<std::unique_ptr<VisualizerWindow>>();
-
-    app->run(*mainWindow);
+    return window;
 }

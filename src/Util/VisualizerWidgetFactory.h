@@ -9,8 +9,8 @@
 
 class VisualizerWidgetFactory{
 public:
-    static std::unique_ptr<IVisualizer> createLineVisualizer(std::string fifoPath, int sampleRate, uint8_t fpsCount, bool useTimeDomain);
-    static std::unique_ptr<IVisualizer> createBlockVisualizer(std::string fifoPath, int sampleRate, uint8_t fpsCount, bool useTimeDomain);
+    static std::unique_ptr<IVisualizer> createLineVisualizer(std::string fifoPath, int sampleRate, uint8_t fpsCount);
+    static std::unique_ptr<IVisualizer> createBlockVisualizer(std::string fifoPath, int sampleRate, uint8_t fpsCount);
 private:
     VisualizerWidgetFactory();
 };

@@ -12,8 +12,10 @@ BlockVisualizer::BlockVisualizer(std::shared_ptr <IFifoProcessorService> process
     : processorService(processorService),
       configService(configService)
 {
-    Glib::signal_timeout().connect(sigc::mem_fun(*this, &BlockVisualizer::on_timeout), configService->getConfig()->getFpsCount());
-    this->displayBuffer = new uint16_t[visualElementCount];
+
+    uint16_t update = ((uint16_t)1000 / configService->getConfig()->getFpsCount());
+    Glib::signal_timeout().connect(sigc::mem_fun(*this, &BlockVisualizer::on_timeout), update);
+    this->displayBuffer = new double[visualElementCount];
 }
 
 BlockVisualizer::~BlockVisualizer() {
@@ -63,7 +65,7 @@ bool BlockVisualizer::on_draw(const Cairo::RefPtr <Cairo::Context> &cr)
 
 
         int k = 0;
-        for(int j = 95; j < 140; j += 1){
+        for(int j = 95; j < 120; j += 1){
             double x = offsetX + i * blockWidth + i * blockSpacerX;
             double y = offsetY - k * blockHeight;
 

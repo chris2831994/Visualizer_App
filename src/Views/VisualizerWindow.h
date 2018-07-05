@@ -7,7 +7,6 @@
 
 #include <gtkmm.h>
 #include "Widgets/IVisualizer.h"
-#include "SettingsWindow.h"
 #include "Widgets/ISettingsDialog.h"
 
 class VisualizerWindow : public Gtk::Window

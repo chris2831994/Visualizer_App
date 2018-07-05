@@ -18,7 +18,7 @@ protected:
     const int visualElementCount = 128;
     std::shared_ptr<IFifoProcessorService> processorService;
     std::shared_ptr<IConfigService> configService;
-    uint16_t * displayBuffer;
+    double * displayBuffer;
 };
 
 #endif // MPD_LINE_VISUALIZER_H

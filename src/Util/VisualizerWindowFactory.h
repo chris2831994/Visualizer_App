@@ -5,9 +5,12 @@
 #ifndef GTKMM_MVC_TEST_VISUALIZERWINDOWFACTORY_H
 #define GTKMM_MVC_TEST_VISUALIZERWINDOWFACTORY_H
 
+#include "../Views/VisualizerWindow.h"
+
 class VisualizerWindowFactory{
 public:
-    static void createAndRunVisualizerWindow();
+
+    static std::unique_ptr<VisualizerWindow>  createVisualizerWindow();
 
 private:
     VisualizerWindowFactory();

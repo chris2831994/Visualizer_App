@@ -19,8 +19,7 @@ public :
     ~FifoProcessorService();
 
     //public Methods
-    uint16_t * getProcessedData();
-    void loadAveragedData(uint16_t * buffer, int length);
+    void loadAveragedData(double * buffer, int length);
     void reInit();
 
 protected:
@@ -31,8 +30,8 @@ protected:
     //protected Vars
     std::shared_ptr<IFifoReaderService> readerService;
     std::shared_ptr<IConfigService> configService;
-    uint16_t *processedDataBuffer;
-    double * realInput;
+    double *processedDataBuffer;
+    double *windowedFrame;
     fftw_complex *fftInput, *fftOutput;
     fftw_plan fftPlan;
     int sampleSize;

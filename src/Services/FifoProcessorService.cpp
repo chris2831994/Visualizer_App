@@ -17,18 +17,18 @@ FifoProcessorService::FifoProcessorService(std::shared_ptr<IFifoReaderService> r
 {
     VisualizerConfig * config = configService->getConfig();
     this->sampleSize = config->getSampleSize();
-
-      this->processedDataBuffer = new uint16_t[sampleSize/2];
-      this->fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (sampleSize));
-      this->realInput = new double[sampleSize];
-      this->fftPlan = fftw_plan_dft_r2c_1d(sampleSize, realInput, fftOutput, FFTW_ESTIMATE_PATIENT);
+    this->windowedFrame = new double[sampleSize];
+    this->processedDataBuffer = new double[sampleSize];
+    this->fftInput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (sampleSize));
+    this->fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (sampleSize));
+    this->fftPlan = fftw_plan_dft_1d(sampleSize, fftInput, fftOutput, FFTW_FORWARD, FFTW_ESTIMATE);
 }
 
 FifoProcessorService::~FifoProcessorService() {
 
     //free allocated memory
     delete(processedDataBuffer);
-    delete(realInput);
+    delete(windowedFrame);
     fftw_destroy_plan(fftPlan);
     fftw_free(fftOutput);
 
@@ -38,41 +38,34 @@ void FifoProcessorService::process(uint16_t *dataBuffer) {
 
     //apply hamming window
     for (int i = 0; i < sampleSize; i++) {
-        double multiplier = 0.54 - 0.46 * cos(2*M_PI*i/(sampleSize-1));
-        dataBuffer[i] = multiplier * dataBuffer[i];
+        //windowedFrame[i] = 1;
+        windowedFrame[i] = 0.54 - 0.46 * cos(2*M_PI*i/(sampleSize));
     }
 
     //load data for fft
     for(int i = 0; i < sampleSize; i++){
-        realInput[i] = dataBuffer[i];
+        fftInput[i][0] = dataBuffer[i] * windowedFrame[i];
+        fftInput[i][1] = 0;
     }
 
     //execute fft
     fftw_execute(fftPlan);
 
-    for(int i = 0; i < sampleSize/2; i++){
+    for(int i = 0; i < sampleSize; i++){
         //convert to polar notation
-        int mag = sqrt(fftOutput[i][0] * fftOutput[i][0] + fftOutput[i][1] + fftOutput[i][1]);
+        double mag = sqrt(fftOutput[i][0] * fftOutput[i][0] + fftOutput[i][1] * fftOutput[i][1]);
         //convert to dB Scale
-        processedDataBuffer[i] = round(20*log10(mag));
-//                double win = 1 - abs((fftOutput[i][0] - sampleSize-1/2)/(sampleSize-1/2));
-        //processedDataBuffer[i] = round(1127 * log(mag/700 + 1));
+        processedDataBuffer[i] = 20*log10(mag);
     }
 
 }
 
-uint16_t * FifoProcessorService::getProcessedData() {
-    uint16_t * dataBuffer = this->readerService->getData();
-    process(dataBuffer);
-    return dataBuffer;
-}
-
-void FifoProcessorService::loadAveragedData(uint16_t *buffer, int length) {
+void FifoProcessorService::loadAveragedData(double *buffer, int length) {
 
     uint16_t * dataBuffer = this->readerService->getData();
     process(dataBuffer);
 
-    int averageStep = (sampleSize/ 2) / length;
+    int averageStep = (sampleSize / 2) / length;
 
 //    if(averageStep == 1){
 //        for(int i = 0; i < (sampleSize/2); i++){
@@ -82,13 +75,15 @@ void FifoProcessorService::loadAveragedData(uint16_t *buffer, int length) {
 //    }
 
     int k = 0;
-    for(int i = 0; i < (sampleSize/2); i += averageStep){
-        int avg = 0;
+    double avg = processedDataBuffer[0];
+    for(int i = 1; i < (sampleSize / 2 + 1); i += averageStep){
+
         for(int j = 0; j < averageStep; j++){
             avg += processedDataBuffer[i+j];
         }
         buffer[k] = avg / averageStep;
         k++;
+        avg = 0;
     }
 }
 
@@ -96,15 +91,15 @@ void FifoProcessorService::reInit() {
 
     //free old allocation
     delete(processedDataBuffer);
-    delete(realInput);
+    delete(windowedFrame);
     fftw_destroy_plan(fftPlan);
     fftw_free(fftOutput);
 
     //allocate new memory with config parameters
     VisualizerConfig * config = configService->getConfig();
     this->sampleSize = config->getSampleSize();
-    this->processedDataBuffer = new uint16_t[sampleSize/2];
-    realInput = new double[sampleSize];
+    this->windowedFrame = new double[sampleSize];
+    this->processedDataBuffer = new double[sampleSize];
     this->fftOutput = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (sampleSize));
     this->fftPlan = fftw_plan_dft_1d(sampleSize, fftInput, fftOutput, FFTW_FORWARD, FFTW_EXHAUSTIVE);
 

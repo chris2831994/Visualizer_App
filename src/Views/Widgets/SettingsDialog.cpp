@@ -114,12 +114,14 @@ void SettingsDialog::on_button_save() {
             config->setFpsCount(row[fpsCountColumns.m_col_val]);
         }
     }
+    configService->writeConfig();
     readerService->reInit();
     processorService->reInit();
-    configService->writeConfig();
+
     hide();
 }
 
 void SettingsDialog::on_button_cancel() {
+    configService->writeConfig();
     hide();
 }
