@@ -13,8 +13,6 @@
 #include "../Views/Widgets/IVisualizer.h"
 #include "../Views/Widgets/LineVisualizer.h"
 #include "../Views/VisualizerWindow.h"
-#include "../Services/SimpleReaderService.h"
-#include "../Services/SimpleProcessorService.h"
 #include "../Views/Widgets/SettingsDialog.h"
 #include "../Views/Widgets/BlockVisualizer.h"
 

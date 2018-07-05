@@ -1,7 +1,5 @@
 file(GLOB_RECURSE source *.cpp *.h)
 
-configure_file(test.glade test.glade COPYONLY)
-
 link_directories(
         ${GTKMM_LIBRARY_DIRS}  )
 
